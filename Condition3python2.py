@@ -93,7 +93,7 @@ def hillStreet(inventory):
     match input():
       case "back door":
         print("As always, the back door is unlocked. You open the door and walk into Ground Hill.")
-        groundHill()
+        groundHill(inventory)
         #if input.include?("back door") or input.include?("go around") or input.include?("behind")
       case "front door":
         #elsif input.include?("front door") or input.include?("main door")
@@ -178,10 +178,10 @@ def hillLounge(inventory):
           description = "\nFirst Hill\nThe main lounge of Hill House. Ugh, the pool table is uncovered. You can return to First Hill or go to Ground Hill."
       case "first hill":
         print("You return to First Hill.")
-        firstHill()
+        firstHill(inventory)
       case "ground hill":
         print("You go down to Ground Hill.")
-        groundHill()
+        groundHill(inventory)
       case _:
         print("Unknown Command")
 
