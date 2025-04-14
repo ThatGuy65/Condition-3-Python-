@@ -1,0 +1,7 @@
++Fore.YELLOW+
++Style.RESET_ALL+
+
+userInput = input("> ").strip().lower()
+    if common(userInput, inventory, description):
+      continue
+    match userInput:
