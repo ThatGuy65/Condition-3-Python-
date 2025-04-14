@@ -52,10 +52,10 @@ def common(userInput, inventory, description):
         #print(itemDescriptions[item])
         case ["examine", _] | ["use", _]:
           print("Item not in inventory")
-        case _:
-          print("Unknown Command")    
+        #case _:
+        #  print("Unknown Command")    
         #print(repr(input.split()))
-  return True
+  return False
 def use_command(item):
   global currentRoom
   match currentRoom:
@@ -88,7 +88,6 @@ def wattsLawn(inventory):
   description = "You step foot onto Watts Lawn. It's usually sparsely populated, though this is...different.\nYou can’t get into most of the buildings without your key fob, but you need to get inside to investigate."
   print(locale)
   print(description)
-  #input = ""
   
   while True:
     if actions < 5:
