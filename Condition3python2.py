@@ -2,12 +2,17 @@
 # Text Adventure Game: Condition 3
 # Olive Stokoszynski, DaeQuan Peele, Faye Glynn
 # April 9, 2020
+
+#Refactor into python3 by Daequan Peele
+#April 9, 2025
 import random
+from colorama import Fore, Style
 # The items the player has taken.
 restart_inventory = ["twan notebook", "apartment key"]
 inventory = ["twan notebook", "apartment key"]
 # Descriptions for each item the player can take.
 itemDescriptions = {"twan notebook" : "An event planner for writing TWANs. There are recent notes, even though you’ve been on vacation for weeks.", "apartment key" : "Your apartment key. Home sweet home.", "ajax can" :"A can of Ajax. It may come in handy later.", "sab key" : "A key to the SAB closet in Woolworth room.", "pool cue" : "A pool cue. It might be useful for prying something open or self defense.", "classroom note" : "A note you found in the classroom. It reads: 'Beware the beast that awaits you at Ground Hunt. Bring a bucket if you want to leave with your life'.", "library note" : "A note you found in the library. It reads: 'haha funne dmq plus another thing defeat beast.'", "key fob" : "A key fob. It will let you enter other buildings.", "pizza dough" : "Pizza dough you found in the PFM. Try throwing it at the grease monster.", "bucket" : "A bucket. Might be good for mixing things.", "dmq" : "A jug of DMQ you found in the clinic. Wonder what it's good for?"}
+currentRoom = "nowhere"
 
 def gameoval():
   print("\nGAME OVER")
@@ -21,55 +26,99 @@ def gameoval():
     startGame(restart_inventory)
   else:
     print("ok bye")
-
+def common(userInput, inventory, description):
+  match(userInput):
+    case "help": 
+      print("\nHere are some commands that might come in handy:\nlook - tells you the description for the room you're in\ninventory - tells you all the items you currently have\nexamine (item) - gives you the description for an item in your inventory\ne - quits the game\n\nAll correct inputs will be 'use [noun]', 'go [place]', or just '[place]'.\nPossible inputs can be written in yellow")
+    case "look":
+      print(description)
+    case "inventory":
+      for item in inventory:
+        print(item)
+    case "e":
+      print("\nExiting...")
+      exit()
+    case _:
+      parts = userInput.split()
+      #print(f"DEBUG: parts = {parts}")
+      match parts:
+        case ["examine", *rest] if " ".join(rest) in inventory:
+          print(f"{itemDescriptions[" ".join(rest)]}")
+        case ["use", *rest] if " ".join(rest) in inventory:
+          use_command(" ".join(rest))
+        #print(itemDescriptions[item])
+        case ["examine", _] | ["use", _]:
+          print("Item not in inventory")
+        case _:
+          print("Unknown Command")    
+        #print(repr(input.split()))
+  return True
+def use_command(item):
+  global currentRoom
+  match currentRoom:
+    case "wattsLawn":
+      print("Nothing to use that on.")
+    case _:
+      print("Not implemented yet! (teehee)") 
 # The intro to the game
 def startGame(inventory):
-  print("Welcome to Condition 3!\n\nIn this adventure, you are Taylor Parsons, investigating NCSSM while on vacation after hearing about the sudden disappearance of all the student body and faculty. Many rumors have manifested about what the cause of the disappearance was including:\na viral outbreak in Royall,\na monster that materialized from cafeteria grease,\nand a shadowy beast that emerged from Ground Hunt.\n\nYou are NCSSM's last hope: your is goal to find and rescue the students and faculty, return the campus to its glory, and provide a safe, fun, and engaging experience for its people. Are you ready to begin? (y or n)")
+  print("Welcome to Condition 3!\n\nIn this adventure, you are Taylor Parsons,investigating NCSSM while on vacation after hearing about the sudden disappearance of all the student body and faculty.\nMany rumors have manifested about what the cause of the disappearance was including:\nA viral outbreak in Royall,\nA monster that materialized from cafeteria grease,\nand A shadowy beast that emerged from Ground Hunt.\n\nYou are NCSSM's last hope: \nYour is goal to find and rescue the students and faculty, return the campus to its glory, and provide a safe, fun, and engaging experience for its people. \nAre you ready to begin? (y or n)")
 
   #input = input()
 
   if input() == "y":
-    print("\nYou approach the derelict institution with your mind clear, trying to stay focused. You check your watch, it's a tad bit past check. You look up to see WATTS HOSPITAL in decrepit gold lettering. It’s time to get to the bottom of this.")
-    print("swag centipede")
+    print("\nYou approach the derelict institution with your mind clear, trying to stay focused." \
+    "\nYou check your watch, it's a tad bit past check. " \
+    "\nYou look up to see WATTS HOSPITAL in decrepit gold lettering. It’s time to get to the bottom of this.")
+    #print("swag centipede")
     wattsLawn(inventory)
   else:
     print("ok bye")
+    return
   # Watts Lawn, the first area. The player can travel to Hill Street or Royall, and attempt to travel to Bryan.
 
 def wattsLawn(inventory):
+  global currentRoom
+  currentRoom = "wattsLawn"
   actions = 0
-  description = "\nWatts Lawn\nYou step foot onto Watts Lawn. It's usually sparsely populated, though this is...different. You can’t get into most of the buildings without your key fob, but you need to get inside to investigate.\nWhere will you go?"
+  locale = "\n++++++++++++" +"\nWatts Lawn\n"+"++++++++++++\n" 
+  description = "You step foot onto Watts Lawn. It's usually sparsely populated, though this is...different.\nYou can’t get into most of the buildings without your key fob, but you need to get inside to investigate."
+  print(locale)
   print(description)
   #input = ""
-
+  
   while True:
     if actions < 5:
       print("\nWhere will you go?")
     else:
-      print("\nTry saying Bryan, Royall, Hunt or Hill.")
-    #print(f"Actions = {actions}")
-
-    match input():
+      print("\nTry saying "+Fore.YELLOW+"Bryan, Royall, Hunt or Hill."+Style.RESET_ALL)
+    #Test of ball knowledge, do you know NCSSM campus?
+    userInput = input("> ").strip().lower()
+    if common(userInput, inventory, description):
+      continue
+    match userInput:
       case "bryan":
         print("You walk to the main entrance, but the door won't open. Try somewhere else.")
         actions += 1
-      case "royal":
-        #print("swag centipede")
+      case "royall":
         royall(inventory)
       case "hunt":
-        print("You can't go there without a fob.")
+        print("You can't go in there without a fob.")
         actions += 1
       case "hill":
         print("You walk over to Hill Street. There's not much here.")
         hillStreet(inventory)
         #actions += 1
+      case "etc" | "pec" |"pfm" | "reynolds" | "watts" | "beall" | "hunt":
+        print("You can't get there without a fob.") 
+      case "north" | "south" |"east" | "west":
+        print("Try saying a building instead of a direction.")
       case _:
         print("Unknown Command")
-        actions += 1
-
+    
   # Royall, a sub-area the player can travel to without a fob. If the player enters, they lose.
 def royall(inventory):
-  print("\nRoyall\nThe infected surroundings of Royall have taken over your body, and you succumb to a mysterious infection. You pass out and fall into a coma. Pathologists will study this event for ages.")
+  print("\nRoyall\nThe infected surroundings of Royall have taken over your body, and you succumb to a mysterious infection. \nYou pass out and fall into a coma. Pathologists will study this event for ages.")
   gameoval()
   #print("GAME OVER")
   #print("Would you like to play again? (y or n)")
@@ -86,7 +135,7 @@ def royall(inventory):
 
   # The next area after Watts Lawn. From here, the player progresses into Ground Hill through the back door.
 def hillStreet(inventory):
-  description = "\nHill Street\nThe road in front of Hill House, once used for Happy Half and casual conversation. There are still faint lines of chalk from a recent block party. The main door to Hill is locked, but perhaps you can go around to the back door."
+  description = "\nHill Street\nThe road in front of Hill House, once used for Happy Half and casual conversation. \nThere are still faint lines of chalk from a recent block party. \nThe main door to Hill is locked, but perhaps you can go around to the back door."
   print(description)
 
   while True:
@@ -109,7 +158,7 @@ def hillStreet(inventory):
 
 # Ground Hill, the player's entrance to the rest of the building. The player can travel to First Hill or Hill Tunnel.
 def groundHill(inventory):
-  description = "\nGround Hill\nThe lower floor of Hill, used primarily for Language and Residential Education classes. The classrooms are locked, but it looks like the elevator is operational. The tunnel is also open."
+  description = "\nGround Hill\nThe lower floor of Hill, used primarily for Language and Residential Education classes. \nThe classrooms are locked, but it looks like the elevator is operational. \nThe tunnel is also open."
   print(description)
   input = ""
   while True:
@@ -705,3 +754,7 @@ def help(input, setting):
 
 
 startGame(inventory)
+
+#https://pc-python.readthedocs.io/en/latest/python_advanced/match_case.html#id1 
+#https://pypi.org/project/colorama/
+#
