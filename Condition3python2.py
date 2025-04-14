@@ -14,6 +14,9 @@ inventory = ["twan notebook", "apartment key"]
 itemDescriptions = {"twan notebook" : "An event planner for writing TWANs. There are recent notes, even though you’ve been on vacation for weeks.", "apartment key" : "Your apartment key. Home sweet home.", "ajax can" :"A can of Ajax. It may come in handy later.", "sab key" : "A key to the SAB closet in Woolworth room.", "pool cue" : "A pool cue. It might be useful for prying something open or self defense.", "classroom note" : "A note you found in the classroom. It reads: 'Beware the beast that awaits you at Ground Hunt. Bring a bucket if you want to leave with your life'.", "library note" : "A note you found in the library. It reads: 'haha funne dmq plus another thing defeat beast.'", "key fob" : "A key fob. It will let you enter other buildings.", "pizza dough" : "Pizza dough you found in the PFM. Try throwing it at the grease monster.", "bucket" : "A bucket. Might be good for mixing things.", "dmq" : "A jug of DMQ you found in the clinic. Wonder what it's good for?"}
 currentRoom = "nowhere"
 
+y = Fore.YELLOW
+reset = Style.RESET_ALL
+
 def gameoval():
   print("\nGAME OVER")
   print("Would you like to play again? (y or n)")
@@ -120,49 +123,45 @@ def wattsLawn(inventory):
 def royall(inventory):
   print("\nRoyall\nThe infected surroundings of Royall have taken over your body, and you succumb to a mysterious infection. \nYou pass out and fall into a coma. Pathologists will study this event for ages.")
   gameoval()
-  #print("GAME OVER")
-  #print("Would you like to play again? (y or n)")
-  #input = gets().chomp().downcase()[0]
-
-  #if input() == "y":
-  #  print("Very well, you begin anew.")
-  #  print("")
-  #  print("")
-  #  inventory.clear()
-  #  startGame(restart_inventory)
-  #else:
-  #  print("ok bye")
-
   # The next area after Watts Lawn. From here, the player progresses into Ground Hill through the back door.
 def hillStreet(inventory):
-  description = "\nHill Street\nThe road in front of Hill House, once used for Happy Half and casual conversation. \nThere are still faint lines of chalk from a recent block party. \nThe main door to Hill is locked, but perhaps you can go around to the back door."
+  global currentRoom 
+  currentRoom = "hillStreet"
+  locale = "\n+++++++++++++" + "\nHill Street\n"+"+++++++++++++\n"
+  description = "The road in front of Hill House, once used for Happy Half and casual conversation. \nThere are still faint lines of chalk from a recent block party. \nThe" +Fore.YELLOW+"main door"+Style.RESET_ALL+"to Hill is"+Fore.GREEN+" locked"+Style.RESET_ALL+", but perhaps you can go around to the"+Fore.YELLOW+"back door"+Style.RESET_ALL+"."
+  print(locale)
   print(description)
 
   while True:
-    match input():
-      case "back door":
+    userInput = input("> ").strip().lower()
+    if common(userInput, inventory, description):
+      continue
+    match userInput:
+      case "back door" | "go around" | "behind":
         print("As always, the back door is unlocked. You open the door and walk into Ground Hill.")
         groundHill(inventory)
-        #if input.include?("back door") or input.include?("go around") or input.include?("behind")
-      case "front door":
-        #elsif input.include?("front door") or input.include?("main door")
+      case "front door" | "main door":
         print("You can't get inside without a key fob.")
       case "watts":
-        #elsif input.include?("watts")
         print("There's no reason to go back to Watts.")
       case "window":
-        #elsif input.include?("window")
         print("You can't open the window.")
       case _:
         print("Unknown Command")
 
 # Ground Hill, the player's entrance to the rest of the building. The player can travel to First Hill or Hill Tunnel.
 def groundHill(inventory):
-  description = "\nGround Hill\nThe lower floor of Hill, used primarily for Language and Residential Education classes. \nThe classrooms are locked, but it looks like the elevator is operational. \nThe tunnel is also open."
+  global currentRoom 
+  currentRoom = "groundHill"
+  locale = locale = "\n+++++++++++++" + "\nGround Hill\n"+"+++++++++++++\n" 
+  description = "The lower floor of Hill, used primarily for Language and Residential Education classes. \nThe classrooms are locked, but it looks like the "+Fore.YELLOW+"elevator"+Style.RESET_ALL+"is operational. \nThe "+Fore.YELLOW+"tunnel"+Style.RESET_ALL+" is also open."
+  print(locale)
   print(description)
-  input = ""
   while True:
-    match input():
+    userInput = input("> ").strip().lower()
+    if common(userInput, inventory, description):
+      continue
+    match userInput:
       case "elevator":
         print("You take the elevator up to First Hill.")
         firstHill(inventory)
@@ -174,15 +173,20 @@ def groundHill(inventory):
 
 # First Hill, one of two areas the player can access from Ground Hill. The player can access their apartment and the bathroom, or travel to Hill Lounge or Ground Hill.
 def firstHill(inventory):
-  description = "\nFirst Hill\nYour domain. You can travel to the bathroom, your apartment, Hill Lounge, or Ground Hill."
+  locale = "\n+++++++++++++" + "\nFirst Hill\n"+"+++++++++++++\n"
+  description = "Your domain. You can travel to the"+Fore.YELLOW+"bathroom"+Style.RESET_ALL+", your "+Fore.YELLOW+"apartment"+Style.RESET_ALL+", "+Fore.YELLOW+"Hill Lounge"+Style.RESET_ALL+", or "+Fore.YELLOW+"Ground Hill"+Style.RESET_ALL+"."
+  print(locale)
   print(description)
   while True:
-    match input():
+    userInput = input("> ").strip().lower()
+    if common(userInput, inventory, description):
+      continue
+    match userInput:
       case "bathroom":
         if "ajax can" in inventory:
           print("You inspect the bathroom. Nothing else of use inside.")
         else:
-          print("You inspect the bathroom. There is a can of Ajax. Will you take it? (y or n)")
+          print("You inspect the bathroom. There is a can of Ajax. Will you take it? "+y+"(y or n)"+reset)
           response = input()
           if response == "y":
               print("You take the Ajax and return to the hallway.")
@@ -194,7 +198,7 @@ def firstHill(inventory):
         if "SAB key" in inventory:
           print("You go inside your apartment. There doesn't seem to be anything else you need.")
         else:
-          print("You go inside your apartment. Looks like all of your stuff is still here. There's a familiar key on the table. Will you take it? (y or n)")
+          print("You go inside your apartment. Looks like all of your stuff is still here. There's a familiar key on the table. Will you take it?" +y+"(y or n)"+reset)
           response = input()
           if response == "y":
               print("You pocket the key and return to the hallway. It appears to be the key to the SAB closet in Woolworth.")

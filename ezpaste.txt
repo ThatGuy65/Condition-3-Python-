@@ -5,3 +5,10 @@ userInput = input("> ").strip().lower()
     if common(userInput, inventory, description):
       continue
     match userInput:
+
+global currentRoom 
+currentRoom = ""
+
+locale = "\n+++++++++++++" + "\n \n"+"+++++++++++++\n"
+description
+print(locale)
