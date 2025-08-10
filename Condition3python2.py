@@ -96,8 +96,7 @@ def wattsLawn(inventory):
       print("\nTry saying "+Fore.YELLOW+"Bryan, Royall, Hunt or Hill."+Style.RESET_ALL)
     #Test of ball knowledge, do you know NCSSM campus?
     userInput = input("> ").strip().lower()
-    if common(userInput, inventory, description):
-      continue
+    
     match userInput:
       case "bryan":
         print("You walk to the main entrance, but the door won't open. Try somewhere else.")
@@ -112,11 +111,16 @@ def wattsLawn(inventory):
         hillStreet(inventory)
         #actions += 1
       case "etc" | "pec" |"pfm" | "reynolds" | "watts" | "beall" | "hunt":
-        print("You can't get there without a fob.") 
+        print("You can't get there without a fob.")
+        actions += 1 
       case "north" | "south" |"east" | "west":
         print("Try saying a building instead of a direction.")
+        actions += 1
       case _:
         print("Unknown Command")
+        actions += 1
+    if common(userInput, inventory, description):
+      continue
     
   # Royall, a sub-area the player can travel to without a fob. If the player enters, they lose.
 def royall(inventory):
@@ -133,8 +137,7 @@ def hillStreet(inventory):
 
   while True:
     userInput = input("> ").strip().lower()
-    if common(userInput, inventory, description):
-      continue
+    
     match userInput:
       case "back door" | "go around" | "behind":
         print("As always, the back door is unlocked. You open the door and walk into Ground Hill.")
@@ -147,6 +150,8 @@ def hillStreet(inventory):
         print("You can't open the window.")
       case _:
         print("Unknown Command")
+    if common(userInput, inventory, description):
+      continue
 
 # Ground Hill, the player's entrance to the rest of the building. The player can travel to First Hill or Hill Tunnel.
 def groundHill(inventory):
@@ -158,8 +163,7 @@ def groundHill(inventory):
   print(description)
   while True:
     userInput = input("> ").strip().lower()
-    if common(userInput, inventory, description):
-      continue
+    
     match userInput:
       case "elevator":
         print("You take the elevator up to First Hill.")
@@ -169,6 +173,8 @@ def groundHill(inventory):
         hillTunnel(inventory)
       case _:
         print()
+    if common(userInput, inventory, description):
+      continue
 
 # First Hill, one of two areas the player can access from Ground Hill. The player can access their apartment and the bathroom, or travel to Hill Lounge or Ground Hill.
 def firstHill(inventory):
@@ -178,8 +184,7 @@ def firstHill(inventory):
   print(description)
   while True:
     userInput = input("> ").strip().lower()
-    if common(userInput, inventory, description):
-      continue
+    
     match userInput:
       case "bathroom":
         if "ajax can" in inventory:
@@ -213,6 +218,8 @@ def firstHill(inventory):
         groundHill(inventory)
       case _:
         print("Unknown Command")
+    if common(userInput, inventory, description):
+      continue
 
 # Hill Lounge. The player needs to go here to get the pool cue in order to open the door to Ground Watts.
 def hillLounge(inventory):
@@ -220,7 +227,8 @@ def hillLounge(inventory):
   print(description)
 
   while True:
-    match input():
+    userInput = input("> ").strip().lower()
+    match userInput:
       case "pool cue":
         if "pool cue" in inventory:
           print("You've already taken the pool cue.")
@@ -236,6 +244,8 @@ def hillLounge(inventory):
         groundHill(inventory)
       case _:
         print("Unknown Command")
+    if common(userInput, inventory, description):
+      continue
 
 # Checks if the door to Ground Watts is open. It is set to true when the boards have been pryed off.
 wattsDoorOpen = False
@@ -249,7 +259,8 @@ def hillTunnel(inventory):
 
   print(description)
   while True:
-    match input():
+    userInput = input("> ").strip().lower()
+    match userInput:
       case "pry boards":
         if wattsDoorOpen:
           print("You've already taken the boards off.")
@@ -273,6 +284,8 @@ def hillTunnel(inventory):
         groundHill(inventory)
       case _:
         print("Uknown Command")
+    if common(userInput, inventory, description):
+      continue
 
     print("Try prying the boards off with something. Use the help command to get a list of basic commands.") if actions > 4 and wattsDoorOpen == False else None
 
@@ -281,7 +294,8 @@ def groundWatts(inventory):
   description = "\nGround Watts\nThis was once used for humanities classrooms, now, it's empty. There is an open classroom to your left. You can return to Hill Tunnel, go up to First Watts, or enter the classroom."
   print(description)
   while True:
-    match input():
+    userInput = input("> ").strip().lower()
+    match userInput:
       case "classroom":
         if "classroom note" in inventory:
           print("A classroom. There isn't anything else in here.")
@@ -301,13 +315,16 @@ def groundWatts(inventory):
         firstWatts(inventory)
       case _:
         print("Unknown Command")
+    if common(userInput, inventory, description):
+      continue
 
 # First Watts. Has the entrance to Reynolds Hallway, and a notice not to go to Royall
 def firstWatts(inventory):
   description = "\nFirst Watts\nAdministrative offices were located here, but honestly it really clashed with the hospital aesthetic. There's a notice on the door:\n'Notice- Royall has been closed down for renovations. Please do not go near it, it may prove dangerous. ~The Chancellor.'\nYou can go back to Ground Hill or to Reynolds Hallway."
   print(description)
   while True:
-    match input():
+    userInput = input("> ").strip().lower()
+    match userInput:
       case "ground hill":
         print("You walk down to Ground Hill.")
         groundHill(inventory)
@@ -316,13 +333,15 @@ def firstWatts(inventory):
         reynoldsHallway(inventory)
       case _:
         print("Unknown Command")
-
+    if common(userInput, inventory, description):
+      continue
 # Reynolds Hallway. Transition area to get to Bryan Hallway.
 def reynoldsHallway(inventory):
   description = "\nReynolds Hallway\nThe Art Studio is here, as well as some female halls. It leads to Bryan Hallway and First Watts."
   print(description)
   while True:
-    match input():
+    userInput = input("> ").strip().lower()
+    match userInput:
       case "watts":
         print("You walk through the hallway to First Watts.")
         firstWatts(inventory)
@@ -331,13 +350,16 @@ def reynoldsHallway(inventory):
         bryanHallway(inventory)
       case _:
         print("Unknown Command")
+    if common(userInput, inventory, description):
+      continue
 
 # Bryan Hallway. From here, the library, Bryan Lobby, the PFM, and Reynolds Hallway can be accessed.
 def bryanHallway():
   description = "\nBryan Hallway\nOne of the main highways of NCSSM. You can get to the Library, Bryan Lobby, and the PFM using this, or to Reynolds Hallway."
   print(description)
   while True:
-    match input():
+    userInput = input("> ").strip().lower()
+    match userInput:
       case "library":
         if "library note" in inventory:
           print("The library is locked.")
@@ -360,6 +382,8 @@ def bryanHallway():
         reynoldsHallway(inventory)
       case _:
         print("Unknown Command")
+    if common(userInput, inventory, description):
+      continue
 
 # Bryan Lobby. The player gets the key fob here, which is needed to progress further.
 def bryanLobby(inventory):
@@ -367,7 +391,8 @@ def bryanLobby(inventory):
   description += " There is a key fob on the desk." if "key fob" not in inventory else None
   print(description)
   while True:
-    match input():
+    userInput = input("> ").strip().lower()
+    match userInput:
       case "bryan":
         print("You return to Bryan Hallway.")
         bryanHallway(inventory)
@@ -380,6 +405,8 @@ def bryanLobby(inventory):
           description = "\nBryan Lobby\nAn information station, filled with staff working tirelessly to address any and all issues. At least, it used to be."
       case _:
         print("Unknown Command")
+    if common(userInput, inventory, description):
+      continue
 
 # Checks whether the grease monster has been defeated. The PFM can be accessed normally if is true, and it will initiate the fight if false.
 greaseDefeat = False
@@ -391,7 +418,8 @@ def pfm(inventory):
   print(description)
   if greaseDefeat == True:
     while True:
-      match input():
+      userInput = input("> ").strip().lower()
+      match userInput:
         case "bryan":
           print("You open up the gate and walk to Bryan Hallway.")
           bryanHallway(inventory)
@@ -400,6 +428,8 @@ def pfm(inventory):
           thePit(inventory)
         case _:
           print("Unknown Command")
+      if common(userInput, inventory, description):
+        continue
   else:
     print("Hurrying into the PFM, you hear the deep, guttural noises of a beast. Do you proceed onward? (y or n)")
     if input() == "y":
@@ -411,9 +441,11 @@ def pfm(inventory):
 # The fight with the grease monster. The player defeats it by getting dough from the kitchen and throwing it at the monster. If the number of turns exceeds 10, the player loses.
 def greaseFight(inventory):
   turns = 0
-  print("\nYou cannot believe your eyes. It is, as the rumors foretold, a giant monster made from grease. It hurls a glob of grease at you that you quickly evade, but it hits the door behind you and seals it shut. The monster blocks the exit to the Pit. What will you do?")
+  description = "\nYou cannot believe your eyes. It is, as the rumors foretold, a giant monster made from grease. It hurls a glob of grease at you that you quickly evade, but it hits the door behind you and seals it shut. The monster blocks the exit to the Pit. What will you do?"
+  print(description)
   while True:
-    match input():
+    userInput = input("> ").strip().lower()
+    match userInput:
       case "fight":
         print("There's no use trying to punch a grease monster.")
       case "cue":
@@ -428,7 +460,9 @@ def greaseFight(inventory):
       case _:
         print("Uknown Command")
         turns += 1
-
+    if common(userInput, inventory, description):
+      continue
+    
     print("")
     print("The grease monster approaches you. You'll have to find something to defeat it.") if turns == 5 else None
     print("The grease monster will defeat you if you don't act quickly. Check the kitchen.") if turns == 8 else None
@@ -441,7 +475,8 @@ def thePit(inventory):
   description = "\nThe Pit\nIt’s the pit. You can go to Woolworth Room with your newly acquired fob, back to the PFM, or around the rest of campus, like Hunt."
   print(description)
   while True:
-    match input():
+    userInput = input("> ").strip().lower()
+    match userInput:
       case "pfm":
         print("You enter the PFM.")
         pfm(inventory)
@@ -461,13 +496,16 @@ def thePit(inventory):
         print("I'll probably put an easter egg or something here, but for now there's nothing.")
       case _:
         print("Unknown Command")
+    if common(userInput, inventory, description):
+      continue
 
 # The Woolworth Room, where the SAB closet can be found.
 def woolworth(inventory):
   description = "\nWoolworth Room\nA place of recreation for students, often occupied by table tennis players. You can access the SAB closet from here."
   print(description)
   while True:
-    match input():
+    userInput = input("> ").strip().lower()
+    match userInput:
       case "pit":
         print("You return outside to the Pit.")
         thePit(inventory)
@@ -485,13 +523,16 @@ def woolworth(inventory):
           print("The closet is locked.")
       case _:
         print("Unkown Command")
+    if common(userInput, inventory, description):
+      continue
 
 # Hunt Lobby. From here, the player can head to the clinic.
 def huntLobby(inventory):
   description = "\nHunt Lobby\nNo running. There's a sign pointing to the clinic."
   print(description)
   while True:
-    match input():
+    userInput = input("> ").strip().lower()
+    match userInput:
       case "clinic":
         print("You walk over to the clinic.")
         clinic(inventory)
@@ -500,6 +541,8 @@ def huntLobby(inventory):
         thePit(inventory)
       case _:
         print("Unknown Command")
+    if common(userInput, inventory, description):
+      continue
 
 # The Clinic, where the player finds the DMQ and enters Ground Hunt for the final fight.
 def clinic(inventory):
@@ -507,7 +550,8 @@ def clinic(inventory):
   description += " There is a jug of DMQ on the table as well as a note." if inventory.include("dmq") else None
   print(description)
   while True:
-    match input():
+    userInput = input("> ").strip().lower()
+    match userInput:
       case "note":
         if inventory.include("clinic note") == False:
           print("You read the note. It reads: 'Do not jump down this hole without a can of Ajax.'\nYou put the note in your twan notebook.")
@@ -530,6 +574,8 @@ def clinic(inventory):
             print("You decide to make prepartions first.")
       case _:
         print("Unknown Command")
+    if common(userInput, inventory, description):
+      continue
 
 
 def groundHunt():
@@ -550,7 +596,8 @@ def cat1(inventory, health):
   description = f"\nOne of them approaches you. You have {health} health. What will you do? (attack, dodge, item, observe, reason)"
   print(description)
   while True:
-    match input():
+    userInput = input("> ").strip().lower()
+    match userInput:
       case "attack":
         num = random.randint[1,3]
         print(f"You run up and try to kick the cat, but it jumps out of the way and hisses at you. It runs up and scratches you. {num} damage taken.")
@@ -578,6 +625,8 @@ def cat1(inventory, health):
 
       case _:
         print("Unknown Command. Lock In!!")
+    if common(userInput, inventory, description):
+      continue
 
     print(f"\nThe cat stares at you. You have {health} health. (attack, dodge, item, observe, reason)")
 
@@ -596,7 +645,8 @@ def cat2(inventory, health):
     print(description)
     while True:
       retaliate = False
-      match input():
+      userInput = input("> ").strip().lower()
+      match userInput:
         case "attack":
           print("You try to attack the cat with the pool cue, but it dodges.")
           retaliate = True
@@ -621,6 +671,8 @@ def cat2(inventory, health):
 
         case _:
           print ("Unknown Command")
+      if common(userInput, inventory, description):
+        continue
 
       if retaliate:
         num = random.randint[1,3]
@@ -645,7 +697,8 @@ def cat3(inventory, health):
   description = "\nA third cat approaches you. You have {health} health. What will you do? (attack, dodge, item, observe, reason)"
   print(description)
   while True:
-    match input():
+    userInput = input("> ").strip().lower()
+    match userInput:
       case "attack":
         print("You lunge forward to attack the cat, but it jumps aside.")
 
@@ -672,6 +725,8 @@ def cat3(inventory, health):
 
       case _:
         print("Unknwon Command")
+    if common(userInput, inventory, description):
+      continue
     #return if $dmqUsed
     print("\nThe cat stares at you. You have {health} health. (attack, dodge, item, observe, reason)")
 
