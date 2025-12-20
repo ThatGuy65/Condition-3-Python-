@@ -131,7 +131,7 @@ def hillStreet(inventory):
   global currentRoom 
   currentRoom = "hillStreet"
   locale = "\n+++++++++++++" + "\nHill Street\n"+"+++++++++++++\n"
-  description = "The road in front of Hill House, once used for Happy Half and casual conversation. \nThere are still faint lines of chalk from a recent block party. \nThe" +Fore.YELLOW+"main door"+Style.RESET_ALL+"to Hill is"+Fore.GREEN+" locked"+Style.RESET_ALL+", but perhaps you can go around to the"+Fore.YELLOW+"back door"+Style.RESET_ALL+"."
+  description = "The road in front of Hill House, once used for Happy Half and casual conversation. \nThere are still faint lines of chalk from a recent block party. \nThe" +Fore.YELLOW+" main door "+Style.RESET_ALL+"to Hill is"+Fore.GREEN+" locked"+Style.RESET_ALL+", but perhaps you can go around to the"+Fore.YELLOW+" back door"+Style.RESET_ALL+"."
   print(locale)
   print(description)
 
@@ -158,7 +158,7 @@ def groundHill(inventory):
   global currentRoom 
   currentRoom = "groundHill"
   locale = locale = "\n+++++++++++++" + "\nGround Hill\n"+"+++++++++++++\n" 
-  description = "The lower floor of Hill, used primarily for Language and Residential Education classes. \nThe classrooms are locked, but it looks like the "+Fore.YELLOW+"elevator"+Style.RESET_ALL+"is operational. \nThe "+Fore.YELLOW+"tunnel"+Style.RESET_ALL+" is also open."
+  description = "The lower floor of Hill, used primarily for Language and Residential Education classes. \nThe classrooms are locked, but it looks like the "+Fore.YELLOW+"elevator "+Style.RESET_ALL+"is operational. \nThe "+Fore.YELLOW+"tunnel"+Style.RESET_ALL+" is also open."
   print(locale)
   print(description)
   while True:
@@ -179,7 +179,7 @@ def groundHill(inventory):
 # First Hill, one of two areas the player can access from Ground Hill. The player can access their apartment and the bathroom, or travel to Hill Lounge or Ground Hill.
 def firstHill(inventory):
   locale = "\n+++++++++++++" + "\nFirst Hill\n"+"+++++++++++++\n"
-  description = "Your domain. You can travel to the"+Fore.YELLOW+"bathroom"+Style.RESET_ALL+", your "+Fore.YELLOW+"apartment"+Style.RESET_ALL+", "+Fore.YELLOW+"Hill Lounge"+Style.RESET_ALL+", or "+Fore.YELLOW+"Ground Hill"+Style.RESET_ALL+"."
+  description = "Your domain. You can travel to the"+Fore.YELLOW+" bathroom"+Style.RESET_ALL+", your "+Fore.YELLOW+"apartment"+Style.RESET_ALL+", "+Fore.YELLOW+"Hill Lounge"+Style.RESET_ALL+", or "+Fore.YELLOW+"Ground Hill"+Style.RESET_ALL+"."
   print(locale)
   print(description)
   while True:
@@ -202,7 +202,7 @@ def firstHill(inventory):
         if "SAB key" in inventory:
           print("You go inside your apartment. There doesn't seem to be anything else you need.")
         else:
-          print("You go inside your apartment. Looks like all of your stuff is still here. There's a familiar key on the table. Will you take it?" +y+"(y or n)"+reset)
+          print("You go inside your apartment. Looks like all of your stuff is still here. There's a familiar key on the table. Will you take it?" +y+" (y or n)"+reset)
           response = input()
           if response == "y":
               print("You pocket the key and return to the hallway. It appears to be the key to the SAB closet in Woolworth.")
@@ -248,12 +248,13 @@ def hillLounge(inventory):
       continue
 
 # Checks if the door to Ground Watts is open. It is set to true when the boards have been pryed off.
-wattsDoorOpen = False
+
 
 # Hill Tunnel. The player needs the pool cue to progress in order to pry the boards off the door to Ground Watts.
 def hillTunnel(inventory):
   actions = 0
   description = "\nHill Tunnel\nThe underground tunnel connecting Ground Hill and Ground Watts. Very convenient to have when it’s raining. To your north is the door to Ground Watts, and to your south is Ground Hill."
+  wattsDoorOpen = False
   if wattsDoorOpen == False:
     description += " The door to Ground Watts has been boarded shut."
 
@@ -409,11 +410,12 @@ def bryanLobby(inventory):
       continue
 
 # Checks whether the grease monster has been defeated. The PFM can be accessed normally if is true, and it will initiate the fight if false.
-greaseDefeat = False
+
 
 # The PFM, where the player encounters the grease monster. After the monster is defeated, it's just another room.
 def pfm(inventory):
   description = "\nThe PFM\nThis is where students went to feed/fuel themselves. Despite not having the most glowing reviews, the staff worked tirelessly to put a smile on kids faces. Now it has an odd stench of grease..."
+  greaseDefeat = False
   description += " You can go to Bryan Lobby or the Pit from here." if greaseDefeat == True else None
   print(description)
   if greaseDefeat == True:
