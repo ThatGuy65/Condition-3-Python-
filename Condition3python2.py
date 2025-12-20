@@ -3,7 +3,7 @@
 # Olive Stokoszynski, DaeQuan Peele, Faye Glynn
 # April 9, 2020
 
-#Refactor into python3 by Daequan Peele
+#Refactor into python3 by DaeQuan Peele
 #April 9, 2025
 import random
 from colorama import Fore, Style
@@ -12,6 +12,8 @@ restart_inventory = ["twan notebook", "apartment key"]
 inventory = ["twan notebook", "apartment key"]
 # Descriptions for each item the player can take.
 itemDescriptions = {"twan notebook" : "An event planner for writing TWANs. There are recent notes, even though you’ve been on vacation for weeks.", "apartment key" : "Your apartment key. Home sweet home.", "ajax can" :"A can of Ajax. It may come in handy later.", "sab key" : "A key to the SAB closet in Woolworth room.", "pool cue" : "A pool cue. It might be useful for prying something open or self defense.", "classroom note" : "A note you found in the classroom. It reads: 'Beware the beast that awaits you at Ground Hunt. Bring a bucket if you want to leave with your life'.", "library note" : "A note you found in the library. It reads: 'haha funne dmq plus another thing defeat beast.'", "key fob" : "A key fob. It will let you enter other buildings.", "pizza dough" : "Pizza dough you found in the PFM. Try throwing it at the grease monster.", "bucket" : "A bucket. Might be good for mixing things.", "dmq" : "A jug of DMQ you found in the clinic. Wonder what it's good for?"}
+fullinv = ["twan notebook", "apartment key", "ajax can", "SAB key", "pool cue", "classroom note" , "library note", "key fob" , "pizza dough", "bucket", "dmq"]
+godHealth = 9001
 currentRoom = "nowhere"
 
 y = Fore.YELLOW
@@ -75,6 +77,8 @@ def startGame(inventory):
     "\nYou look up to see WATTS HOSPITAL in decrepit gold lettering. It’s time to get to the bottom of this.")
     #print("swag centipede")
     wattsLawn(inventory)
+  if input() == "t":
+    groundHunt(fullinv)
   else:
     print("ok bye")
     return
@@ -266,7 +270,7 @@ def hillTunnel(inventory):
         if wattsDoorOpen:
           print("You've already taken the boards off.")
         elif "pool cue" in inventory:
-          print("You pry the boards off the with the pool cue.")
+          print("You pry the boards off the door with the pool cue.")
           actions += 1
           wattsDoorOpen = True
           description = "\nHill Tunnel\nThe underground tunnel connecting Ground Hill and Ground Watts. Very convenient to have when it’s raining. To your north is the door to Ground Watts, and to your south is Ground Hill."
@@ -284,7 +288,7 @@ def hillTunnel(inventory):
         print("You return to Ground Hill.")
         groundHill(inventory)
       case _:
-        print("Uknown Command")
+        print("Unknown Command")
     if common(userInput, inventory, description):
       continue
 
@@ -355,7 +359,7 @@ def reynoldsHallway(inventory):
       continue
 
 # Bryan Hallway. From here, the library, Bryan Lobby, the PFM, and Reynolds Hallway can be accessed.
-def bryanHallway():
+def bryanHallway(inventory):
   description = "\nBryan Hallway\nOne of the main highways of NCSSM. You can get to the Library, Bryan Lobby, and the PFM using this, or to Reynolds Hallway."
   print(description)
   while True:
@@ -389,7 +393,7 @@ def bryanHallway():
 # Bryan Lobby. The player gets the key fob here, which is needed to progress further.
 def bryanLobby(inventory):
   description = "\nBryan Lobby\nAn information station, filled with staff working tirelessly to address any and all issues. At least, it used to be."
-  description += " There is a key fob on the desk." if "key fob" not in inventory else None
+  description += " There is a key fob on the desk." if "key fob" not in inventory else ""
   print(description)
   while True:
     userInput = input("> ").strip().lower()
@@ -416,7 +420,7 @@ def bryanLobby(inventory):
 def pfm(inventory):
   description = "\nThe PFM\nThis is where students went to feed/fuel themselves. Despite not having the most glowing reviews, the staff worked tirelessly to put a smile on kids faces. Now it has an odd stench of grease..."
   greaseDefeat = False
-  description += " You can go to Bryan Lobby or the Pit from here." if greaseDefeat == True else None
+  description += " You can go to Bryan Lobby or the Pit from here." if greaseDefeat == True else ""
   print(description)
   if greaseDefeat == True:
     while True:
@@ -435,7 +439,7 @@ def pfm(inventory):
   else:
     print("Hurrying into the PFM, you hear the deep, guttural noises of a beast. Do you proceed onward? (y or n)")
     if input() == "y":
-      greaseFight(description)
+      greaseFight(inventory)
     else:
       print("You back slowly away and return to Bryan Hallway.")
       bryanHallway(inventory)
@@ -460,7 +464,7 @@ def greaseFight(inventory):
         inventory.pop()
         thePit(inventory)
       case _:
-        print("Uknown Command")
+        print("Unknown Command")
         turns += 1
     if common(userInput, inventory, description):
       continue
@@ -512,19 +516,19 @@ def woolworth(inventory):
         print("You return outside to the Pit.")
         thePit(inventory)
       case "closet":
-        if "sab key" and "bucket" in inventory:
+        if "SAB key" and "bucket" in inventory:
           print("You open the closet. Nothing else of use.")
-        elif "sab key" in inventory: #sab key and no bucket
+        elif "SAB key" in inventory: #SAB key and no bucket
           print("You unlock the closet using the SAB key. There is a bucket inside. Will you take it? (y or n)")
           if input() == "y":
             print("You take the bucket")
             inventory.append("bucket")
           else:
             print("You reject the bucket and lock the closet.")
-        else:#no sab key
+        else:#no SAB key
           print("The closet is locked.")
       case _:
-        print("Unkown Command")
+        print("Unknown Command")
     if common(userInput, inventory, description):
       continue
 
@@ -549,17 +553,17 @@ def huntLobby(inventory):
 # The Clinic, where the player finds the DMQ and enters Ground Hunt for the final fight.
 def clinic(inventory):
   description = "\nClinic\nA place for students to go when they are feeling unwell, to recieve medicine, or to get out of class for a day. There is a giant hole in the corner of the room that appears to lead into a tunnel."
-  description += " There is a jug of DMQ on the table as well as a note." if inventory.include("dmq") else None
+  description += " There is a jug of DMQ on the table as well as a note." if "dmq" not in inventory else ""
   print(description)
   while True:
     userInput = input("> ").strip().lower()
     match userInput:
       case "note":
-        if inventory.include("clinic note") == False:
+        if "clinic note" not in inventory:
           print("You read the note. It reads: 'Do not jump down this hole without a can of Ajax.'\nYou put the note in your twan notebook.")
           inventory.append("clinic note")
       case "dmq":
-        if inventory.include("dmq") == False:
+        if "dmq" not in inventory:
           print("You take the DMQ.")
           inventory.append("dmq")
           #look at below,, description doesn't change?
@@ -580,7 +584,7 @@ def clinic(inventory):
       continue
 
 
-def groundHunt():
+def groundHunt(inventory):
   health = 10
   description = "\nGround Hunt\nThe underbelly of Hunt, where mysterious things lurk. Only lit by candles, the cries of trapped students echo down the moist halls."
   print("\nYou land on the ground with a hard fall. Standing up, you stagger through the tunnel in darkness towards a light at the end. Stepping into the light, you find yourself in a dungeon: the legendary Ground Hunt. You see your colleagues and students trapped in cages, but they appear unharmed. You run towards them, but they motion for you to stop and be quiet. Turning to your right, you see a shadowy mass quickly approaching you. It steps into the light, and you finally see the perpetrator: the pipecats.\nYou don't have a chance to react before they surround you. They stare steely-eyed into your soul, and you begin to dread the fate that awaits you.")
@@ -615,15 +619,16 @@ def cat1(inventory, health):
         print("You try to reason with the cat, saying 'Let's not do that', but it doesn't react.")
 
       case "item":
-        print("Inventory: " + inventory.join(", "))
+        print("Inventory: " + ", ".join(inventory))
         print("What item do you want to use?")
         item = str(input())
 
-        if item == ("cue") and "pool cue" in inventory:
+        if item == ("pool cue") and "pool cue" in inventory:
           print("You brandish the pool cue, and the cat backs off.")
           cat2(inventory, health)
         else:
-          useItem(item)
+          #useItem(item)
+          useItem()
 
       case _:
         print("Unknown Command. Lock In!!")
@@ -665,10 +670,10 @@ def cat2(inventory, health):
           retaliate = True
 
         case "item":
-          print("Inventory: " + inventory.join(", "))
+          print("Inventory: " + ", ".join(inventory))
           print("What item do you want to use?")
-          item = str(input())
-          useItem(item)
+          #item = str(input())
+          useItem()
           retaliate = True
 
         case _:
@@ -696,7 +701,7 @@ dmqUsed = False
 
 # Battle with the third pipecat. This cat will not attack the player. If the player chooses to reason, they will either get the bad end or the selfish end.
 def cat3(inventory, health):
-  description = "\nA third cat approaches you. You have {health} health. What will you do? (attack, dodge, item, observe, reason)"
+  description = f"\nA third cat approaches you. You have {health} health. What will you do? (attack, dodge, item, observe, reason)"
   print(description)
   while True:
     userInput = input("> ").strip().lower()
@@ -708,10 +713,10 @@ def cat3(inventory, health):
         print("You brace for the cat to attack you, but it remains still.")
 
       case "item":
-        print("Inventory: " + inventory.join(", "))
+        print("Inventory: " + ", ".join(inventory))
         print("What item do you want to use?")
-        item = str(input())
-        useItem(item)
+        #item = str(input())
+        useItem()
 
       case "observe":
         print("It doesn't seem to want to fight you.")
@@ -733,12 +738,21 @@ def cat3(inventory, health):
     print("\nThe cat stares at you. You have {health} health. (attack, dodge, item, observe, reason)")
 
 # This method is called when the player uses an item during combat with a cat.
-def useItem(input):
+def useItem():
+  #bucketUsed = False
+  #ajaxUsed = False
+  #dmqUsed = False
   while True:
-    match input:
+    userInput = input("> ").strip().lower()  # pauses for player input
+    match userInput:
       case "bucket":
         if "bucket" in inventory:
-          print("You've already used the bucket.") if bucketUsed == True else print("You take out the bucket and place it on the ground.") and bucketUsed == True
+          if bucketUsed == True:
+            print("You've already used the bucket.")
+            break  
+          else: 
+            print("You take out the bucket and place it on the ground.")
+            bucketUsed = True
 
       case "ajax":
         if "ajax can" in inventory:
@@ -762,15 +776,16 @@ def useItem(input):
         else:
           print("You don't have anything to put the DMQ in.")
 
-      case "cue":
-        if "cue" in inventory:
+      case "pool cue":
+        if "pool cue" in inventory:
           print("You are already holding the pool cue.")
       case "note":
         print("You can't use a note, but you can examine one.")
       case "key" | "fob" | "twan":
         print("That won't help.")
       case _:
-        print(f"You don't have {input}.")
+        print(f"You don't have {userInput}.")
+        return
 
 # This occurs if you run out of health or choose to unlock the cages after reasoning with cat 3.
 def badEnd():
@@ -791,7 +806,7 @@ def help(input, setting):
   while True:
     match input:
       case " inventory" | "i":
-        print("Inventory: " + inventory.join(", "))
+        print("Inventory: " + ", ".join(inventory))
   # Gives the player a list of starting commands.
       case "help":
         print("\nHere are some commands that might come in handy:\nlook - tells you the description for the room you're in\ninventory - tells you all the items you currently have\nexamine (item) - gives you the description for an item in your inventory")
