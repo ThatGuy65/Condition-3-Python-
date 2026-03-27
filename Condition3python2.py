@@ -722,7 +722,8 @@ def cat3(inventory, health):
         print("It doesn't seem to want to fight you.")
 
       case "reason":
-        print("You try to reason with the cat. It appears afraid of you, and it jumps back in fear as you brandish the pool cue. The other cats back off as you walk towards towards the cages. Do you unlock the cages? (y or n)")
+        print("You try to reason with the cat. It appears afraid of you, and it jumps back in fear as you brandish the pool cue. The othe" \
+        "r cats back off as you walk towards towards the cages. Do you unlock the cages? (y or n)")
         if input() == "y":
           print("You walk towards the cages to free the students. As you begin unlocking the door, the cats charge you and knock you unconscious on the ground.")
           badEnd()
@@ -749,7 +750,7 @@ def useItem():
         if "bucket" in inventory:
           if bucketUsed == True:
             print("You've already used the bucket.")
-            break  
+            return
           else: 
             print("You take out the bucket and place it on the ground.")
             bucketUsed = True
